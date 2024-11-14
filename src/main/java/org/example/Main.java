@@ -1,72 +1,61 @@
 package org.example;
 
-import org.dhatim.fastexcel.Workbook;
-import org.dhatim.fastexcel.Worksheet;
-
-import org.dhatim.fastexcel.reader.ReadableWorkbook;
-import org.dhatim.fastexcel.reader.Row;
-import org.dhatim.fastexcel.reader.Sheet;
+import java.io.PrintStream;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.stream.Stream;
+import java.nio.charset.Charset;
+import java.util.Iterator;
 
 public class Main {
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws IOException {
+        System.out.println((Charset.defaultCharset()));
 
-        //var f = new File("/testExcel/924.xlsx");
+        String ru = "Русский язык";
+        PrintStream ps = new PrintStream(System.out, true, "UTF-8");
+        System.out.println(ru.length());
+        System.out.println(ru);
+        ps.println(ru);
 
-        /*try (FileInputStream inputStream = new FileInputStream(new File("/testExcel/924.xlsx"));
-             ReadableWorkbook wb = new ReadableWorkbook(inputStream)) {
+        FileInputStream file = new FileInputStream(new File("/testExcel/924.xlsx"));
 
-            for (Sheet sheet : wb.getSheets().toList()) {
-                System.out.println("Sheet: " + sheet.getName());
-                try (java.util.stream.Stream<Row> rows = sheet.openStream()) {
-                    rows.forEach(row -> {
-                        row.stream().forEach(cell -> {
-                            String value = cell.asString(); // Получаем значение ячейки как строку
-                            System.out.print(value + "\t");
-                        });
-                        System.out.println();
-                    });
+//Create Workbook instance holding reference to .xlsx file
+        XSSFWorkbook workbook = new XSSFWorkbook(file);
+
+//Get first/desired sheet from the workbook
+        XSSFSheet sheet = workbook.getSheetAt(0);
+
+//Iterate through each rows one by one
+        Iterator<Row> rowIterator = sheet.iterator();
+        while (rowIterator.hasNext()) {
+
+            Row row = rowIterator.next();
+
+            //For each row, iterate through all the columns
+            Iterator<Cell> cellIterator = row.cellIterator();
+
+            while (cellIterator.hasNext()) {
+
+                Cell cell = cellIterator.next();
+
+                //Check the cell type and format accordingly
+                switch (cell.getCellType()) {
+                    case NUMERIC:
+                        System.out.print(cell.getNumericCellValue() + "t");
+                        break;
+                    case STRING:
+                        System.out.print(cell.getStringCellValue() + "t");
+                        break;
                 }
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
-// Укажите путь к вашему Excel файлу
-        Path filePath = Paths.get("your_excel_file.xlsx");
-
-        try (Workbook workbook = new Workbook(filePath)) {
-            // Получаем лист по имени или индексу (начинается с 0)
-            Worksheet worksheet = workbook.getSheet("YourSheetName");  // Или workbook.getSheet(0)
-
-
-            Sheet sheet = workbook.getFirstSheet();
-
-            if (worksheet != null) {
-                // Проходим по всем строкам и колонкам в рабочем листе
-                for (int row = 0; row <= worksheet.getLastRowNum(); row++) {
-                    for (int col = 0; col <= worksheet.getLastColNum(row); col++) {
-                        // Получаем значение ячейки
-                        String value = worksheet.сell(row, col).getValue();
-                        System.out.print(value != null ? value : "None");
-                        System.out.print('\t');  // Табуляция для разделения значений
-                    }
-                    System.out.println();  // Переход на новую строку после каждой строки ячеек
-                }
-            } else {
-                System.out.println("Рабочий лист не найден");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("");
         }
-
+        file.close();
 
 
     }
