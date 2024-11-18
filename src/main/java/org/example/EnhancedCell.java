@@ -1,12 +1,11 @@
 package org.example;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static org.apache.poi.ss.usermodel.CellType.BLANK;
 
 //import static org.apache.poi.ss.usermodel.CellType.BLANK;
 
@@ -17,11 +16,18 @@ public class EnhancedCell {
         this.cell = cell;
     }
 
-    public boolean getEmpty() {
-        if (cell.getCellType() == BLANK) {
+    public void isEmpty() {
+/*        if (cell.getCellType() == BLANK) {
             return true;
         } else {
             return false;
+        }*/
+        if (cell == null || cell.getCellType() == CellType.BLANK ||
+                (cell.getCellType() == CellType.STRING && cell.getStringCellValue().trim().isEmpty())) {
+            //System.out.println("Ячейка " + cell.getRowIndex()+" " + cell.getColumnIndex() + " пуста.");
+            System.out.print("true ");
+        } else {
+            System.out.print("false ");
         }
     }
 

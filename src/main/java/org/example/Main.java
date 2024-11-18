@@ -20,8 +20,6 @@ import static java.util.Calendar.DATE;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-
-
         /*
         System.out.println((Charset.defaultCharset()));
         String ru = "Русский язык";
@@ -32,15 +30,33 @@ public class Main {
 
         FileInputStream file = new FileInputStream(new File("/testExcel/924.xlsx"));
 
-//Create Workbook instance holding reference to .xlsx file
+        //Create Workbook instance holding reference to .xlsx file
         XSSFWorkbook workbook = new XSSFWorkbook(file);
 
-//Get first/desired sheet from the workbook
+        //Get first/desired sheet from the workbook
         XSSFSheet sheet = workbook.getSheetAt(0);
 
-//Iterate through each rows one by one
+        //Iterate through each rows one by one
         Iterator<Row> rowIterator = sheet.iterator();
-        while (rowIterator.hasNext()) {
+
+        int startRow = 0;
+        int endRow = 2;
+        int startCol = 0;
+        int endCol = 5;
+
+
+        for (int rowNum = startRow; rowNum <= endRow; rowNum++) {
+            Row row = sheet.getRow(rowNum);
+            //if (row == null) continue; // Пропустить пустые строки
+            for (int colNum = startCol; colNum <= endCol; colNum++) {
+                Cell cell = row.getCell(colNum);
+                EnhancedCell enhancedCell = new EnhancedCell(cell);
+                enhancedCell.isEmpty();
+            }
+            System.out.println("");
+        }
+
+/*        while (rowIterator.hasNext()) {
 
             Row row = rowIterator.next();
 
@@ -53,9 +69,9 @@ public class Main {
                 System.out.print(enhancedCell.getValueAsString() + " ");
             }
             System.out.println("");
-        }
+        }*/
         file.close();
-
-
     }
+
 }
+
