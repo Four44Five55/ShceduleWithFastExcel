@@ -28,34 +28,47 @@ public class Main {
         System.out.println(ru);
         ps.println(ru);*/
 
-        FileInputStream file = new FileInputStream(new File("/testExcel/924.xlsx"));
+        FileInputStream file1 = new FileInputStream(new File("/testExcel/924.xlsx"));
+        FileInputStream file2 = new FileInputStream(new File("/testExcel/teacher.xlsx"));
 
-        //Create Workbook instance holding reference to .xlsx file
-        XSSFWorkbook workbook = new XSSFWorkbook(file);
 
-        //Get first/desired sheet from the workbook
-        XSSFSheet sheet = workbook.getSheetAt(0);
+        //Create Workbook instance holding reference to .xlsx file1
+        XSSFWorkbook workbook1 = new XSSFWorkbook(file1);
+        XSSFWorkbook workbook2 = new XSSFWorkbook(file2);
 
-        //Iterate through each rows one by one
-        Iterator<Row> rowIterator = sheet.iterator();
+        //Get first/desired sheet1 from the workbook1
+        XSSFSheet sheet1 = workbook1.getSheetAt(0);
+        XSSFSheet sheet2 = workbook2.getSheetAt(0);
+
 
         int startRow = 0;
         int endRow = 2;
-        int startCol = 0;
-        int endCol = 5;
+        int startCol = 3;
+        int endCol = 6;
+        int[] rowArray={11,14,17,20,24,27,30,33,37,40,43,46,50,53,56,59,63,66,69,72,76,79,82};
 
 
-        for (int rowNum = startRow; rowNum <= endRow; rowNum++) {
-            Row row = sheet.getRow(rowNum);
+        //for (int rowNum = startRow; rowNum <= endRow; rowNum++) {
+        for (int rowNum = startRow; rowNum < rowArray.length; rowNum++) {
+            Row row1 = sheet1.getRow(rowArray[rowNum]-1);
+            Row row2 = sheet2.getRow(rowArray[rowNum]-1);
+
             //if (row == null) continue; // Пропустить пустые строки
             for (int colNum = startCol; colNum <= endCol; colNum++) {
-                Cell cell = row.getCell(colNum);
-                EnhancedCell enhancedCell = new EnhancedCell(cell);
-                enhancedCell.isEmpty();
+                Cell cell1 = row1.getCell(colNum);
+                Cell cell2 = row2.getCell(colNum);
+                EnhancedCell enhancedCell1 = new EnhancedCell(cell1);
+                EnhancedCell enhancedCell2 = new EnhancedCell(cell2);
+
+                System.out.print("Gr. "+enhancedCell1.getValueAsString() + " ");
+                System.out.print("Th. "+enhancedCell2.getValueAsString() + " ");
+                enhancedCell1.isEmpty();
+                enhancedCell2.isEmpty();
             }
             System.out.println("");
         }
-
+        //Iterate through each rows one by one
+        //Iterator<Row> rowIterator = sheet1.iterator();
 /*        while (rowIterator.hasNext()) {
 
             Row row = rowIterator.next();
@@ -70,7 +83,7 @@ public class Main {
             }
             System.out.println("");
         }*/
-        file.close();
+        file1.close();
     }
 
 }
